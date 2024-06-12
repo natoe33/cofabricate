@@ -17,7 +17,8 @@ if (relays) {
 
 export const defaultRelays = [
     'wss://purplepag.es',
-    'wss://relay.damus.io'
+    'wss://relay.damus.io',
+    'wss://relay.f7z.io'
 ]
 
 if (!relayList || !Array.isArray(relayList) || relayList.length === 0) {
@@ -25,11 +26,13 @@ if (!relayList || !Array.isArray(relayList) || relayList.length === 0) {
 }
 
 const _ndk: NDKSvelte = new NDKSvelte({
-    devWriteRelayUrls: ['wss://relay.strfront.com'],
+    //devWriteRelayUrls: ['wss://relay.strfront.com'],
     explicitRelayUrls: relayList,
     enableOutboxModel: true,
 }) as NDKSvelte;
 
-const ndk = writable(_ndk);
+_ndk.connect();
 
-export default ndk;
+export const ndk = _ndk;
+
+// export default ndk;

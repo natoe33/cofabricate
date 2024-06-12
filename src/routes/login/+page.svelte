@@ -2,4 +2,4 @@
     <title>Log In</title>
 </svelte:head>
 
-<p>Log In</p>n
+<p>Log In</p>

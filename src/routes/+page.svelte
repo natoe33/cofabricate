@@ -1,23 +1,36 @@
-<script lang='ts'>
-    import { ndk } from "$lib/stores/nostr.js";
+<script lang="ts">
+	import { ndk } from '$lib/stores/nostr.js';
 	import { NDKHighlight } from '@nostr-dev-kit/ndk';
-    import { RelayList } from "@nostr-dev-kit/ndk-svelte-components";
+	import { RelayList } from '@nostr-dev-kit/ndk-svelte-components';
+	const img = 'https://picsum.photos/800/500';
 
-    // export let data;
-    const highlights = ndk.storeSubscribe(
-        {kinds: [9802 as number]},
-        {closeOnEose: true},
-        NDKHighlight
-    );
+	// export let data;
 </script>
+
 <svelte:head>
-    <title>Decentralized Manufacturing</title>
+	<title>Decentralized Manufacturing</title>
 </svelte:head>
 
-<h1>Home</h1>
-
 <p>
-    {$highlights.length}
-    {ndk.explicitRelayUrls}
-    {ndk.activeUser}
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+	labore et dolore magna aliqua. Consequat id porta nibh venenatis cras sed felis eget. Fermentum et
+	sollicitudin ac orci phasellus egestas tellus rutrum tellus. Lobortis mattis aliquam faucibus
+	purus in massa tempor nec. In nisl nisi scelerisque eu ultrices vitae. Dui sapien eget mi proin
+	sed libero enim. Pharetra massa massa ultricies mi quis. Quam viverra orci sagittis eu volutpat
+	odio. Et malesuada fames ac turpis egestas integer eget. Tellus elementum sagittis vitae et leo.
+	Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque. Nulla posuere sollicitudin
+	aliquam ultrices sagittis orci a scelerisque purus.
+</p>
+<img src={img} alt="placeholder" />
+<p>
+	Imperdiet dui accumsan sit amet nulla. At erat pellentesque adipiscing commodo elit at. Eu mi
+	bibendum neque egestas. Leo vel orci porta non pulvinar neque laoreet. Quam pellentesque nec nam
+	aliquam sem et tortor consequat. Blandit volutpat maecenas volutpat blandit. Praesent semper
+	feugiat nibh sed pulvinar proin gravida hendrerit lectus. Malesuada proin libero nunc consequat
+	interdum. Risus pretium quam vulputate dignissim. Sollicitudin nibh sit amet commodo nulla. Et
+	netus et malesuada fames ac turpis egestas sed. Enim sed faucibus turpis in eu mi bibendum neque.
+	Blandit massa enim nec dui nunc. Aliquam ultrices sagittis orci a scelerisque purus. Pharetra diam
+	sit amet nisl suscipit adipiscing bibendum. Lorem donec massa sapien faucibus et molestie. Enim
+	tortor at auctor urna nunc id cursus metus. A erat nam at lectus urna duis convallis convallis.
+	Tempor id eu nisl nunc mi ipsum.
 </p>

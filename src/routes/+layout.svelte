@@ -33,5 +33,5 @@
 	}
 </script>
 
-<NavBar />
+<NavBar on:signin={signIn} />
 <slot></slot>

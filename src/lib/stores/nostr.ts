@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import NDKSvelte from '@nostr-dev-kit/ndk-svelte';
+import NDK from '@nostr-dev-kit/ndk';
 
 let relays;
 
@@ -34,3 +35,9 @@ console.log(_ndk.activeUser?.profile);
 const ndkStore = writable(_ndk);
 
 export const ndk = ndkStore;
+
+const _bunkerNDK = new NDK({
+	explicitRelayUrls: [...defaultRelays, 'wss://relay.nsecbunker.com', 'wss://nostr.vulpem.com']
+});
+
+export const bunkerNDK = writable(_bunkerNDK);

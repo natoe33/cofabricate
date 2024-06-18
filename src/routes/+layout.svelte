@@ -1,14 +1,18 @@
 <script lang="ts">
 	import NavBar from '$lib/components/NavBar.svelte';
+	import LoginModal from '$lib/components/LoginModal/Modal.svelte';
 	import { ndk } from '$lib/stores/nostr';
 	import { NDKNip07Signer } from '@nostr-dev-kit/ndk';
 	import { onMount } from 'svelte';
+
+	let modalActive = false;
 
 	onMount(async () => {
 		await signIn();
 	});
 
 	async function signIn() {
+		modalActive = !modalActive;
 		console.debug('signIn called');
 		let signer;
 		try {
@@ -35,3 +39,4 @@
 
 <NavBar on:signin={signIn} />
 <slot></slot>
+<LoginModal active={modalActive} />

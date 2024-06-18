@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {} from '@nostr-dev-kit/ndk-svelte-components';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { ndk } from '$lib/stores/nostr';
 	import { createEventDispatcher } from 'svelte';

@@ -20,19 +20,21 @@ if (!relayList || !Array.isArray(relayList) || relayList.length === 0) {
 	relayList = defaultRelays;
 }
 
-const _ndk: NDKSvelte = new NDKSvelte({
+const _ndk: NDK = new NDK({
 	devWriteRelayUrls: ['wss://relay.strfront.com'],
 	explicitRelayUrls: relayList,
 	enableOutboxModel: true,
 	autoConnectUserRelays: true,
-	autoFetchUserMutelist: true
-}) as NDKSvelte;
+	autoFetchUserMutelist: true,
+	clientName: 'cofabricate'
+}) as NDK;
 
 _ndk.connect();
 
 console.log(_ndk.activeUser?.profile);
 
 const ndkStore = writable(_ndk);
+
 
 export const ndk = ndkStore;
 

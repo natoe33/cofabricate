@@ -1,10 +1,5 @@
 <script lang="ts">
-	import { ndk } from '$lib/stores/nostr.js';
-	import { NDKHighlight } from '@nostr-dev-kit/ndk';
-	import { RelayList } from '@nostr-dev-kit/ndk-svelte-components';
 	const img = 'https://picsum.photos/800/500';
-
-	// export let data;
 </script>
 
 <svelte:head>

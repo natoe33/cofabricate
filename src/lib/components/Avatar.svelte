@@ -1,23 +1,35 @@
 <script lang="ts">
 	import UserInterface from '$lib/interfaces/user';
 	import { ndk } from '$lib/stores/nostr';
-	import type { NDKUserProfile } from '@nostr-dev-kit/ndk';
-	export let userProfile: NDKUserProfile | undefined;
+	import { currentUser } from '$lib/store';
+	import type { NDKUserProfile, NDKUser } from '@nostr-dev-kit/ndk';
+	import { get } from 'svelte/store';
 
-	let _userProfile = userProfile;
 	let image: string | undefined;
-	let defaultImage = `https://robohash.org/${userProfile?.id?.slice(0, 2)}`;
+	const _ndk = get(ndk);
 
-	let observerUserProfile;
+	let random = (Math.random() + 1).toString(36).substring(6);
 
-	if (!_userProfile?.image) {
-		observerUserProfile = $ndk.activeUser?.profile;
+	let defaultImage = `https://robohash.org/${random}`;
+
+	if (!_ndk.activeUser?.profile?.image) {
+		image = defaultImage;
+	} else {
+		image = _ndk.activeUser.profile.image;
 	}
 
-	$: {
-		_userProfile = $observerUserProfile! as NDKUserProfile;
-		image = _userProfile.image;
-	}
+	$: {image = _ndk.activeUser?.profile?.image;}
+	// $: {
+	// 	//image = $currentUser?.profile?.image;
+	// 	image = _ndk.activeUser?.profile?.image;
+	// 	console.debug(image);
+	// }
 </script>
 
-<img src={image || defaultImage} alt="User Avatar" class="is-rounded" />
+<figure class="image">
+	{#if !_ndk.activeUser}
+		<img src={defaultImage} alt="Generic Avatar" class="is-rounded" />
+	{:else}
+		<img src={image} alt="User Avatar" class="is-rounded" />
+	{/if}
+</figure>

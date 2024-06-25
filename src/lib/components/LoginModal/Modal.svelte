@@ -1,8 +1,13 @@
 <script lang="ts">
+	import { createEventDispatcher } from "svelte";
+	import Nip07Button from "./Nip07Button.svelte";
+
 	export let active = false;
 
-	function closeDialog() {
-		active = !active;
+	const dispatch = createEventDispatcher();
+
+	function toggleModal() {
+		dispatch('toggleModal');
 	}
 </script>
 
@@ -11,8 +16,10 @@
 	<div class="modal-card">
 		<header class="modal-card-head">
 			<p class="modal-card-title">Login</p>
-			<button class="delete" aria-label="close" on:click={closeDialog}></button>
+			<button class="delete" aria-label="close" on:click={toggleModal}></button>
 		</header>
-		<section class="modal-card-body"></section>
+		<section class="modal-card-body">
+			<Nip07Button on:closeModal={toggleModal}/>
+		</section>
 	</div>
 </div>

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import NavBar from '$lib/components/NavBar.svelte';
 	import LoginModal from '$lib/components/LoginModal/Modal.svelte';
-	import { ndk } from '$lib/stores/nostr';
-	import { NDKNip07Signer } from '@nostr-dev-kit/ndk';
+	import { login } from "$lib/utils/login";
+	import { browserSetup } from "./browser-setup";
 	import { onMount } from 'svelte';
 
 	let modalActive = false;
@@ -11,32 +11,14 @@
 		await signIn();
 	});
 
+	function toggleModal() {
+		modalActive=!modalActive;
+	}
 	async function signIn() {
-		modalActive = !modalActive;
-		console.debug('signIn called');
-		let signer;
-		try {
-			signer = await new NDKNip07Signer();
-		} catch (e) {}
-		console.log(signer);
-
-		//if (!signer) return;
-
-		$ndk.signer = signer;
-
-		const pubkey = await signer?.user();
-		console.log(pubkey);
-
-		if (pubkey) {
-			$ndk.activeUser = pubkey;
-			await $ndk.activeUser.fetchProfile();
-			console.log($ndk.activeUser);
-		}
-
-		await $ndk.connect();
+		browserSetup();
 	}
 </script>
 
-<NavBar on:signin={signIn} />
+<NavBar on:signin={toggleModal} />
 <slot></slot>
-<LoginModal active={modalActive} />
+<LoginModal active={modalActive} on:toggleModal={toggleModal} />

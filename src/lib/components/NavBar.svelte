@@ -2,6 +2,7 @@
 	import {} from '@nostr-dev-kit/ndk-svelte-components';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { ndk } from '$lib/stores/nostr';
+	import { currentUser } from '$lib/store';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
@@ -10,7 +11,7 @@
 
 	let avatarimage: string | undefined;
 	$: {
-		avatarimage = $ndk.activeUser?.profile?.image;
+		avatarimage = $currentUser?.profile?.image;
 	}
 
 	function signIn() {
@@ -44,11 +45,9 @@
 				<div class="buttons">
 					<a class="button" href="/">Home</a>
 					<a class="button" href="/about">About</a>
-					{#if $ndk.activeUser}
-						<Avatar userProfile={$ndk.activeUser.profile} />
-					{:else}
-						<button class="button" on:click={signIn}>Sign In</button>
-					{/if}
+					<button on:click={signIn}>
+						<Avatar />
+					</button>
 				</div>
 			</div>
 		</div>

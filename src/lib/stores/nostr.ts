@@ -1,12 +1,14 @@
 import { writable } from 'svelte/store';
-import NDKSvelte from '@nostr-dev-kit/ndk-svelte';
+//import NDKSvelte from '@nostr-dev-kit/ndk-svelte';
 import NDK from '@nostr-dev-kit/ndk';
 
 let relays;
 
 try {
 	relays = localStorage.getItem('relays');
-} catch (e) {}
+} catch (e) {
+	console.error(e);
+}
 
 let relayList: string[] = [];
 
@@ -31,10 +33,9 @@ const _ndk: NDK = new NDK({
 
 _ndk.connect();
 
-console.log(_ndk.activeUser?.profile);
+console.debug('Nostr store current user: ', _ndk.activeUser?.profile);
 
 const ndkStore = writable(_ndk);
-
 
 export const ndk = ndkStore;
 

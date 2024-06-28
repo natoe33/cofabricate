@@ -13,10 +13,10 @@ import { loginState } from '$lib/stores/sesson';
 import { get } from 'svelte/store';
 
 export type LoginMethod = 'none' | 'pk' | 'nip07' | 'nip46';
-const $ndk = get(ndk);
+let $ndk = get(ndk);
 const $bunkerNDK = get(bunkerNDK);
 
-export async function login(method: LoginMethod, userPubkey?: string ): Promise<NDKUser | null> {
+export async function login(method: LoginMethod, userPubkey?: string): Promise<NDKUser | null> {
 	console.debug(`logging in with ${method}`);
 	let u: NDKUser | null | undefined;
 
@@ -25,9 +25,7 @@ export async function login(method: LoginMethod, userPubkey?: string ): Promise<
 			loginState.set(null);
 			return null;
 		case 'pk':
-			const key = localStorage.getItem('nostr-key');
-			if (!key) return null;
-			else return await pkLogin(key);
+			return await pkLogin();
 		case 'nip07':
 			u = await nip07Login($ndk);
 			console.debug('Logged in as: ', u);
@@ -52,11 +50,20 @@ export async function login(method: LoginMethod, userPubkey?: string ): Promise<
 	}
 }
 
-async function pkLogin(key: string): Promise<NDKUser | null> {
+async function pkLogin(): Promise<NDKUser | null> {
+	const key = localStorage.getItem('nostr-key');
+	if (!key) return null;
+	else return await pkSignin(key);
+}
+
+async function pkSignin(key: string): Promise<NDKUser | null> {
 	const signer = new NDKPrivateKeySigner(key);
-	const u = await signer.user();
-	if (u) loggedIn(signer, u!, 'pk');
-	return u;
+	const user = await signer.user();
+	if (user) loggedIn(signer, user!, 'pk');
+	await user.fetchProfile();
+	currentUser.set(user);
+	sessionStorage.setItem('user', JSON.stringify(user));
+	return user;
 }
 
 async function nip07Login(ndk: NDK): Promise<NDKUser | null> {
@@ -74,12 +81,19 @@ async function nip07Login(ndk: NDK): Promise<NDKUser | null> {
 			ndk.signer = new NDKNip07Signer();
 			user = await ndk.signer?.blockUntilReady();
 			ndk.activeUser = user;
+			ndk.activeUser.fetchProfile();
 			user.ndk = ndk;
 			console.debug('Nip07 Login user:', user);
 			console.debug('NDK: ', ndk);
 			if (user) localStorage.setItem('nostr-key-method', 'nip07');
 			localStorage.setItem('pubkey', user.pubkey);
-		} catch (e) {}
+			await user.fetchProfile();
+			currentUser.set(user);
+			sessionStorage.setItem('user', JSON.stringify(user));
+			$ndk = ndk;
+		} catch (e) {
+			console.error(`NIP-07 login error: ${e}`);
+		}
 	}
 	if (user) await user.fetchProfile();
 	return user;

@@ -1,29 +1,45 @@
 <script lang="ts">
-	import UserInterface from '$lib/interfaces/user';
 	import { ndk } from '$lib/stores/nostr';
 	import { currentUser } from '$lib/store';
-	import type { NDKUserProfile, NDKUser } from '@nostr-dev-kit/ndk';
+	import NDK, { NDKUser } from '@nostr-dev-kit/ndk';
 	import { get } from 'svelte/store';
+	import { onMount } from 'svelte';
 
 	let image: string | undefined;
-	const _ndk = get(ndk);
+	let _ndk = get(ndk);
+	let sessionProfile: NDKUser | null = null;
+
+	onMount(() => {
+		const sessionProfileObj = sessionStorage.getItem('user');
+		sessionProfile = sessionProfileObj ? JSON.parse(sessionProfileObj) : null;
+		if (sessionProfile) {
+			image = sessionProfile.profile?.image;
+		}
+	});
+
+	const _currentUser = get(currentUser);
 
 	let random = (Math.random() + 1).toString(36).substring(6);
-
 	let defaultImage = `https://robohash.org/${random}`;
 
-	if (!_ndk.activeUser?.profile?.image) {
-		image = defaultImage;
-	} else {
-		image = _ndk.activeUser.profile.image;
+	image = defaultImage;
+
+	$: {
+		console.debug(sessionProfile);
+		image = sessionProfile?.profile?.image;
 	}
 
-	$: {image = _ndk.activeUser?.profile?.image;}
-	// $: {
-	// 	//image = $currentUser?.profile?.image;
-	// 	image = _ndk.activeUser?.profile?.image;
-	// 	console.debug(image);
-	// }
+	$: ndkUpdated(_ndk);
+
+	function ndkUpdated(_ndk: NDK) {
+		console.debug('NDK updated');
+		if (_ndk.activeUser && _ndk.activeUser.profile && _ndk.activeUser.profile.image) {
+			image = _ndk.activeUser.profile.image;
+		} else {
+			image = defaultImage;
+		}
+		_ndk = _ndk;
+	}
 </script>
 
 <figure class="image">

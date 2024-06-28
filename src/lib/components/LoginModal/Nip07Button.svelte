@@ -4,8 +4,10 @@
 	import { currentUser } from '$lib/store';
 	import { browser } from '$app/environment';
 	import { createEventDispatcher } from 'svelte';
+	import { get } from 'svelte/store';
 
 	let noNip07: boolean;
+	let _ndk = get(ndk);
 
 	$: if (browser) {
 		noNip07 = !window.nostr;
@@ -14,13 +16,14 @@
 	const dispatch = createEventDispatcher();
 
 	async function nip07Login() {
-		const user = await login($ndk, undefined, 'nip07');
+		const user = await login('nip07', undefined);
 		if (!user) alert('Nip07 Login Failed');
 		else {
 			$currentUser = user;
-			$currentUser.fetchProfile();
+			await $currentUser.fetchProfile();
 			localStorage.setItem('nostr-key-method', 'nip07');
 			localStorage.setItem('nostr-target-npub', $currentUser.npub);
+			_ndk.activeUser = $currentUser;
 			dispatch('closeModal');
 			console.debug($currentUser);
 		}

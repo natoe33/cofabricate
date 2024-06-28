@@ -1,5 +1,4 @@
 <script lang="ts">
-	import {} from '@nostr-dev-kit/ndk-svelte-components';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { ndk } from '$lib/stores/nostr';
 	import { currentUser } from '$lib/store';
@@ -8,11 +7,6 @@
 	const dispatch = createEventDispatcher();
 
 	let active = false;
-
-	let avatarimage: string | undefined;
-	$: {
-		avatarimage = $currentUser?.profile?.image;
-	}
 
 	function signIn() {
 		console.debug('signing in');
@@ -24,8 +18,7 @@
 	<div class="navbar-brand">
 		<h1 class="title is-1">CoFabricate</h1>
 		<!-- svelte-ignore a11y-missing-attribute -->
-		<a
-			role="button"
+		<button
 			class="navbar-burger"
 			class:is-active={active}
 			aria-label="menu"
@@ -37,19 +30,32 @@
 			<span aria-hidden="true"></span>
 			<span aria-hidden="true"></span>
 			<span aria-hidden="true"></span>
-		</a>
+		</button>
 	</div>
 	<div id="mainMenu" class="navbar-menu" class:is-active={active}>
 		<div class="navbar-end">
 			<div class="navbar-item">
-				<div class="buttons">
-					<a class="button" href="/">Home</a>
-					<a class="button" href="/about">About</a>
-					<button on:click={signIn}>
-						<Avatar />
-					</button>
-				</div>
+				<a class="button" href="/">Home</a>
+			</div>
+			<div class="navbar-item">
+				<a class="button" href="/about">About</a>
+			</div>
+			<div class="navbar-item">
+				<button on:click={signIn}>
+					<Avatar />
+				</button>
 			</div>
 		</div>
 	</div>
+	<!-- <div id="mobileMenu" class="navbar-menu is-hidden-desktop" class:is-active={active}>
+		<aside class="menu">
+		</aside>
+	</div> -->
 </nav>
+
+<style>
+	.nav-menu {
+		display: flex;
+		flex-direction: column;
+	}
+</style>

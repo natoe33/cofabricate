@@ -1,11 +1,12 @@
 import { writable } from 'svelte/store';
 //import NDKSvelte from '@nostr-dev-kit/ndk-svelte';
 import NDK from '@nostr-dev-kit/ndk';
+import { browser } from '$app/environment';
 
 let relays;
 
 try {
-	relays = localStorage.getItem('relays');
+	if (browser) relays = localStorage.getItem('relays');
 } catch (e) {
 	console.error(e);
 }

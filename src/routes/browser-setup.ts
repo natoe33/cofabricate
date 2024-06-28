@@ -4,12 +4,12 @@ import { ndk } from '$lib/stores/nostr';
 import { get } from 'svelte/store';
 import { currentUser } from '$lib/store';
 import { NDKNip07Signer, NDKUser } from '@nostr-dev-kit/ndk';
+import { browser } from '$app/environment';
 
 const _ndk = get(ndk);
 
 export async function browserSetup() {
-	const pubkey = localStorage.getItem('pubkey');
-	console.debug(pubkey);
+	const pubkey = browser ? localStorage.getItem('pubkey') : '';
 
 	if (pubkey) {
 		const u = _ndk.getUser({ pubkey });

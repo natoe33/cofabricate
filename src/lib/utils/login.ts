@@ -11,14 +11,18 @@ import { bunkerNDK, ndk } from '$lib/stores/nostr';
 import { currentUser } from '$lib/store';
 import { loginState } from '$lib/stores/sesson';
 import { get } from 'svelte/store';
+import { browser } from '$app/environment';
 
 export type LoginMethod = 'none' | 'pk' | 'nip07' | 'nip46';
-let $ndk = get(ndk);
-const $bunkerNDK = get(bunkerNDK);
+
+let $ndk: NDK;
+const $bunkerNDK: NDK = get(bunkerNDK);
+
 
 export async function login(method: LoginMethod, userPubkey?: string): Promise<NDKUser | null> {
 	console.debug(`logging in with ${method}`);
 	let u: NDKUser | null | undefined;
+	$ndk = get(ndk);
 
 	switch (method) {
 		case 'none':
@@ -67,7 +71,7 @@ async function pkSignin(key: string): Promise<NDKUser | null> {
 }
 
 async function nip07Login(ndk: NDK): Promise<NDKUser | null> {
-	const storedNpub = localStorage.getItem('pubkey');
+	const storedNpub = browser ? localStorage.getItem('pubkey') : '';
 	let user: NDKUser | null = null;
 
 	if (storedNpub) {
@@ -80,8 +84,9 @@ async function nip07Login(ndk: NDK): Promise<NDKUser | null> {
 		try {
 			ndk.signer = new NDKNip07Signer();
 			user = await ndk.signer?.blockUntilReady();
+			user.ndk = ndk;
+			user.fetchProfile();
 			ndk.activeUser = user;
-			ndk.activeUser.fetchProfile();
 			user.ndk = ndk;
 			console.debug('Nip07 Login user:', user);
 			console.debug('NDK: ', ndk);

@@ -3,11 +3,12 @@
     <v-main>
       <router-view />
     </v-main>
-
-    <AppFooter />
+    <AppBar />
+    <NavDrawer />
+    <Login />
   </v-app>
 </template>
 
 <script lang="ts" setup>
-  //
+//
 </script>

@@ -1,10 +1,19 @@
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
+const { mobile } = useDisplay();
+
+onMounted(() => {
+  console.log(`mobile display: ${mobile.value}`);
+});
+
 const img = ref("https://picsum.photos/800/500");
 </script>
 <template>
+  <!-- <v-container class="fill-height mt-5" :class="[mobile ? 'w-100' : 'w-75']"> -->
   <v-container class="fill-height mt-5">
-    <v-responsive class="align-centerfill-height mx-auto" max-width="900">
-      <p>
+    <!-- <v-responsive class="align-centerfill-height mx-auto w-auto" max-width="900"> -->
+    <v-responsive class="mx-auto">
+      <p class="text-body-1">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Consequat id porta
         nibh venenatis cras sed felis eget. Fermentum et sollicitudin ac orci
@@ -19,7 +28,7 @@ const img = ref("https://picsum.photos/800/500");
       </p>
       <!-- <v-img class="mb-4" height="150" :src="img" /> -->
       <v-img class="mb-4" :src="img" />
-      <p>
+      <p class="text-body-1">
         Imperdiet dui accumsan sit amet nulla. At erat pellentesque adipiscing
         commodo elit at. Eu mi bibendum neque egestas. Leo vel orci porta non
         pulvinar neque laoreet. Quam pellentesque nec nam aliquam sem et tortor

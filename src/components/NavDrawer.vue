@@ -3,7 +3,7 @@ import { useAppStore } from "@/stores/app";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { login, nostr, currentUser } = storeToRefs(appStore);
+const { login, nostr, currentUser, drawer } = storeToRefs(appStore);
 let random = (Math.random() + 1).toString(36).substring(6);
 let defaultImage = ref(`https://robohash.org/${random}`);
 const subtitle = ref("");
@@ -17,6 +17,8 @@ onMounted(() => {
 });
 
 function handleClick() {
+  console.log(nostr.value.loginState);
+
   if (nostr.value.loginState !== "logged-in") {
     login.value = !login.value;
   }
@@ -24,7 +26,7 @@ function handleClick() {
 </script>
 <template>
   <!-- <v-navigation-drawer :width="150" v-model="drawer" temporary> -->
-  <v-navigation-drawer expand-on-hover rail>
+  <v-navigation-drawer v-model="drawer" :width="200">
     <v-list>
       <v-list-item
         :prepend-avatar="defaultImage"

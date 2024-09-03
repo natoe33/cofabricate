@@ -1,11 +1,4 @@
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
-const { mobile } = useDisplay();
-
-onMounted(() => {
-  console.log(`mobile display: ${mobile.value}`);
-});
-
 const img = ref("https://picsum.photos/800/500");
 </script>
 <template>
@@ -27,7 +20,7 @@ const img = ref("https://picsum.photos/800/500");
         purus.
       </p>
       <!-- <v-img class="mb-4" height="150" :src="img" /> -->
-      <v-img class="mb-4" :src="img" />
+      <v-img class="my-4" :src="img" />
       <p class="text-body-1">
         Imperdiet dui accumsan sit amet nulla. At erat pellentesque adipiscing
         commodo elit at. Eu mi bibendum neque egestas. Leo vel orci porta non

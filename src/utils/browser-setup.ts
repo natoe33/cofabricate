@@ -18,7 +18,7 @@ export async function browserSetup() {
     currentUser.value = u;
   }
 
-  if (!pubkey && method !== "none") return nostr.value.login("nip07");
+  // if (!pubkey && method !== "none") return nostr.value.login("nip07");
 
   if (method && pubkey) {
     console.debug(`logging in with ${method} as ${pubkey}`);

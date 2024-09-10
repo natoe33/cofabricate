@@ -72,7 +72,7 @@ export class Nostr {
     method: LoginMethod,
     userPubkey?: string
   ): Promise<NDKUser | null> {
-    console.debug(`logging in with ${method}`);
+    // console.debug(`logging in with ${method}`);
 
     switch (method) {
       case "none":
@@ -190,11 +190,13 @@ export class Nostr {
     await u.fetchProfile();
     currentUser.value = u;
     this.ndk.activeUser = u;
-    console.debug(`DEBUG setting current user (loggedIn): ${u}`);
+    // console.debug(`DEBUG setting current user (loggedIn): ${u}`);
     this.loginState = "logged-in";
-    login.value = !login.value;
+    login.value = false;
     localStorage.setItem("pubkey", u.pubkey);
     localStorage.setItem("nostr-key-method", method);
     sessionStorage.setItem("user", JSON.stringify(u));
   }
+
+  private async createEvent() {}
 }

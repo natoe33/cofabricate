@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NDKUser } from "@nostr-dev-kit/ndk";
 import { useAppStore } from "@/stores/app";
 import { storeToRefs } from "pinia";
 
@@ -10,11 +11,23 @@ const defaultImage = ref();
 const title = ref();
 const subtitle = ref();
 
-watch(currentUser, async (user) => {
-  title.value = user?.profile ? user.profile.displayName ? user.profile.displayName : user.profile.name : "Test User";
-  subtitle.value = user?.profile ? user.profile.nip05 ? user.profile.nip05 : user.profile.name : "test@cofabricate";
-  defaultImage.value = user?.profile ? user.profile.image : `https://robohash.org/${random}`;
-})
+watch(currentUser, async (user: NDKUser | null) => {
+  if (user && user.profile) {
+    title.value = user.profile.displayName
+      ? user.profile.displayName
+      : user.profile.name;
+    subtitle.value = user.profile.nip05
+      ? user.profile.nip05
+      : user.profile.name;
+    defaultImage.value = user.profile.image
+      ? user.profile.image
+      : `https://robohash.org/${random}`;
+  } else {
+    title.value = "Test User";
+    subtitle.value = "test@cofabricate";
+    defaultImage.value = `https://robohash.org/${random}`;
+  }
+});
 
 onMounted(() => {
   title.value = "Test User";
@@ -23,7 +36,7 @@ onMounted(() => {
 });
 
 function handleHome() {
-  router.push('/');
+  router.push("/");
 }
 
 function handleClick() {
@@ -31,7 +44,7 @@ function handleClick() {
 
   if (nostr.value.loginState !== "logged-in") {
     login.value = !login.value;
-  }else{
+  } else {
     if (currentUser.value?.profile?.name) {
       router.push(`/${encodeURIComponent(currentUser.value.profile.name)}`);
     }
@@ -42,7 +55,12 @@ function handleClick() {
   <!-- <v-navigation-drawer :width="150" v-model="drawer" temporary> -->
   <v-navigation-drawer v-model="drawer" :width="200" temporary>
     <v-list nav>
-      <v-list-item prepend-icon="mdi-view-dashboard" title="Home" value="home" @click="handleHome"></v-list-item>
+      <v-list-item
+        prepend-icon="mdi-view-dashboard"
+        title="Home"
+        value="home"
+        @click="handleHome"
+      ></v-list-item>
       <v-list-item
         :prepend-avatar="defaultImage"
         :title="title"
@@ -50,7 +68,6 @@ function handleClick() {
         @click="handleClick"
       ></v-list-item>
       <v-divider></v-divider>
-
     </v-list>
   </v-navigation-drawer>
 </template>
